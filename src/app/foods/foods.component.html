@@ -1,0 +1,102 @@
+<div class="row">
+  <div class='col-md-8'>
+    <div class='card'>
+      <div class='card-header'>
+        {{pageTitle}}
+      </div>
+      
+      <div class='card-body'>
+        <div class='row'>
+          <div class='col-md-1'>Filter by:</div>
+
+          <div class='col-md-2'>
+            <!-- gives the listFilter a default value equal to the value of "listFilter",
+                  the value can be changed, changing the value of "filtered by" -->
+            <input type="text"
+                [(ngModel)]='listFilter'/>
+          </div>
+
+          <div class='col-md-2'>
+            <button class="btn btn-danger btn-sm"
+            (click)="emptyFilter()">
+                X
+            </button>
+          </div>
+
+          <div class='col-md-3'>
+            Total calories: {{ totalCalories | number: '1.0-0' }}, Total price: €{{ totalPrice | number: '1.2-2'}}
+              <button class="btn btn-secondary btn-sm"
+              (click)="resetCalories()">Reset</button>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-md-2'>
+            <h4>Filtered by: {{listFilter}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class='table-responsive'>
+        <table class="table"
+            *ngIf='foods && foods.length'>
+          <thead>
+            <tr>
+              <th>
+                <button class='btn btn-primary'
+                  (click)='toggleImage()'>
+                  {{hideImage ? 'Show' : 'Hide'}}  Image
+                </button> <!-- if hideImage = true,
+                                make the string say Show Image
+                              if hideImage = false
+                                make the string say Hide Image  -->
+              </th>
+              <th>Add to counter</th>
+              <th>Product</th>
+              <th>Calories</th>
+              <th>Calories/g</th>
+              <th>Grams</th>
+              <!-- TODO -->
+              <th>Price/Kg</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='let food of filteredFoods'>
+              <td>
+                <img *ngIf = '!hideImage'
+                    [src]='food.productUrl'
+                    [title] = 'food.productName'
+                    [style.width.px] = imageWidth
+                    [style.margin.px] = imageMargin>
+              </td>
+              <td>
+                <div>
+                  <button class='btn btn-primary' (click)="addFood(food.productCaloriesPerGram*food.productGram, food.productName, food.productPricePerKilogram/1000*food.productGram)">
+                    Add Food
+                  </button>
+                </div>
+              </td>
+              <td>{{ food.productName }}</td>
+              <td>{{ food.productCaloriesPerGram * food.productGram | number:'1.0-0'}}</td>
+              <td>{{ food.productCaloriesPerGram }}</td>
+              <td>          
+                <input type="number" [(ngModel)]="food.productGram">
+                
+              </td>
+              <td>{{ food.productPricePerKilogram | number: '1.2-2'}}</td>
+              <td>{{ (food.productPricePerKilogram * food.productGram)/1000 | currency:'EUR' }} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-4'>
+    <app-messages></app-messages>
+  </div>
+</div>
+
+
+
+
+
+
